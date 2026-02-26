@@ -14,7 +14,7 @@ def main():
 
     advisory = generate_advisory(sample_data)
 
-    print("\n🌾 Agricultural Advisory Report\n")
+    print("\n🌾 వ్యవసాయ సలహా నివేదిక (Telugu)\n")
     for key, value in advisory.items():
         print(f"{key}:\n{value}\n")
 

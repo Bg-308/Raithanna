@@ -9,7 +9,12 @@ Analyze environmental data and provide:
 5. Yield Optimization Advice
 
 Respond in structured JSON format.
+
+IMPORTANT LANGUAGE REQUIREMENT:
+- All advisory text (headings, bullet points, explanations) must be written in the Telugu language (తెలుగు).
+- Do not include English sentences in the advisory content.
 """
+
 
 def build_user_prompt(data):
     return f"""
@@ -21,5 +26,5 @@ Soil Moisture: {data.soil_moisture}%
 Rainfall: {data.rainfall}mm
 Growth Stage: {data.growth_stage}
 
-Provide detailed advisory.
+Provide a detailed advisory in the Telugu language (తెలుగు).
 """

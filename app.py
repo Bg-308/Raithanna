@@ -6,7 +6,7 @@ from data_models import EnvironmentalData
 from advisory_engine import generate_advisory
 
 st.set_page_config(
-    page_title="Farmer Future | Agricultural Advisory",
+    page_title="Farmer Future | వ్యవసాయ సూచనలు (Telugu)",
     page_icon="🌾",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -47,32 +47,44 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<p class="main-header">🌾 Farmer Future</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">AI-powered agricultural advisory based on your environmental data</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-header">🌾 ఫార్మర్ ఫ్యూచర్</p>', unsafe_allow_html=True)
+st.markdown(
+    '<p class="sub-header">మీ పంటకు సంబంధించిన పర్యావరణ డేటా ఆధారంగా AI ఆధారిత వ్యవసాయ సలహాలు (తెలుగులో)</p>',
+    unsafe_allow_html=True,
+)
 
 with st.form("advisory_form"):
     col1, col2 = st.columns(2)
 
     with col1:
-        crop = st.text_input("Crop", value="Tomato", placeholder="e.g. Tomato, Wheat, Rice")
-        temperature = st.slider("Temperature (°C)", 0.0, 50.0, 32.0, 0.5)
-        humidity = st.slider("Humidity (%)", 0.0, 100.0, 85.0, 1.0)
+        crop = st.text_input(
+            "పంట పేరు",
+            value="టమోటా",
+            placeholder="ఉదా: టమోటా, గోధుమ, బియ్యం",
+        )
+        temperature = st.slider("ఉష్ణోగ్రత (°C)", 0.0, 50.0, 32.0, 0.5)
+        humidity = st.slider("ఆర్ద్రత (%)", 0.0, 100.0, 85.0, 1.0)
         soil_type = st.selectbox(
-            "Soil Type",
+            "మట్టి రకం",
             ["Loamy", "Sandy", "Clay", "Silty", "Peaty", "Chalky"],
             index=0,
         )
 
     with col2:
-        soil_moisture = st.slider("Soil Moisture (%)", 0.0, 100.0, 78.0, 1.0)
-        rainfall = st.number_input("Rainfall (mm)", min_value=0.0, value=12.0, step=0.5)
+        soil_moisture = st.slider("మట్టి తేమ (%)", 0.0, 100.0, 78.0, 1.0)
+        rainfall = st.number_input(
+            "వర్షపాతం (మిల్లీమీటర్లు - mm)",
+            min_value=0.0,
+            value=12.0,
+            step=0.5,
+        )
         growth_stage = st.selectbox(
-            "Growth Stage",
-            ["Seedling", "Vegetative", "Flowering", "Fruiting", "Harvest"],
+            "పంట దశ",
+            ["తొలకరి మొలక (Seedling)", "వృద్ధి దశ (Vegetative)", "పుష్పదశ (Flowering)", "ఫలదశ (Fruiting)", "పంట కోత (Harvest)"],
             index=2,
         )
 
-    submitted = st.form_submit_button("Generate Advisory")
+    submitted = st.form_submit_button("సలహా తయారు చేయండి")
 
 if submitted:
     try:
@@ -86,10 +98,10 @@ if submitted:
             growth_stage=growth_stage,
         )
 
-        with st.spinner("Generating advisory..."):
+        with st.spinner("వ్యవసాయ సలహాలు తయారు చేస్తున్నాము..."):
             advisory = generate_advisory(env_data)
 
-        st.success("Advisory generated successfully.")
+        st.success("వ్యవసాయ సలహాలు విజయవంతంగా తయారయ్యాయి.")
 
         def format_value(v):
             if isinstance(v, dict):
@@ -106,10 +118,12 @@ if submitted:
             return str(v)
 
         for key, value in advisory.items():
+            # Keys may come in English; show them as-is but advisory
+            # content itself is generated in Telugu from the prompt.
             title = key.replace("_", " ").title()
             st.subheader(title)
             st.markdown(format_value(value))
 
     except Exception as e:
-        st.error(f"Something went wrong: {e}")
-        st.info("Check that OPENAI_API is set in your .env file.")
+        st.error(f"ఏదో లోపం జరిగింది: {e}")
+        st.info("దయచేసి `.env` ఫైల్‌లో `OPENAI_API` సరిగా సెట్ అయ్యిందో లేదో ధృవీకరించండి.")
